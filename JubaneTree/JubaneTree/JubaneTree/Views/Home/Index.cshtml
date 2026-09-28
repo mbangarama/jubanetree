@@ -1,0 +1,234 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Family Tree";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+
+    <!-- LEFT FAMILY NAVIGATION -->
+    <div class="col-md-3">
+
+        <div class="family-card"
+             style="padding:20px;">
+
+            <div style="margin-bottom:20px;">
+
+                <h4 class="family-heading"
+                    style="margin-top:0;">
+                    Jubane Family
+                </h4>
+
+                <small class="family-muted">
+                    Family members
+                </small>
+
+            </div>
+
+
+            <!-- Search -->
+            <div class="form-group">
+
+                <div class="input-group">
+
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </span>
+
+                    <input type="text"
+                           id="familySearch"
+                           class="form-control"
+                           placeholder="Search family..." />
+
+                </div>
+
+            </div>
+
+
+            <hr />
+
+
+            <!-- Existing Bootstrap Treeview -->
+            <div id="tree"></div>
+
+
+            <hr />
+
+
+            <button type="button"
+                    class="btn btn-family btn-block">
+
+                <span class="glyphicon glyphicon-plus"></span>
+                Add Family Member
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <div class="col-md-9">
+
+        <div id="partialRender">
+
+            <!-- Welcome -->
+            <div class="family-card"
+                 style="padding:30px; margin-bottom:20px;">
+
+                <div class="row">
+
+                    <div class="col-sm-8">
+
+                        <h1 class="family-heading"
+                            style="margin-top:0;">
+                            Our Family Tree
+                        </h1>
+
+                        <h4 class="family-muted">
+                            Zizalwane lezihlobo zako Jubane
+                        </h4>
+
+                        <p style="margin-top:20px;">
+                            Explore our family history, discover
+                            relatives and help us preserve the
+                            story of the Jubane family for future
+                            generations.
+                        </p>
+
+                    </div>
+
+                    <div class="col-sm-4 text-center">
+
+                        <img src="~/Images/Jubane_FamilyTree_Logo.jpg"
+                             class="img-responsive center-block"
+                             style="max-height:160px;"
+                             alt="Jubane Family Tree" />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TREE AREA -->
+            <div class="family-card"
+                 style="padding:25px;">
+
+                <div class="row">
+
+                    <div class="col-sm-8">
+
+                        <h3 class="family-heading"
+                            style="margin-top:0;">
+                            Family Tree
+                        </h3>
+
+                        <p class="family-muted">
+                            Select a family member to view their
+                            details.
+                        </p>
+
+                    </div>
+
+                    <div class="col-sm-4 text-right">
+
+                        <button type="button"
+                                class="btn btn-family">
+
+                            <span class="glyphicon glyphicon-plus"></span>
+                            Add Member
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <hr />
+
+                <div id="visualFamilyTree">
+
+                    <div class="text-center family-muted"
+                         style="padding:80px 20px;">
+
+                        <span class="glyphicon glyphicon-tree-deciduous"
+                              style="font-size:50px;"></span>
+
+                        <h4>
+                            Select a family member
+                        </h4>
+
+                        <p>
+                            Choose somebody from the family list
+                            to explore their branch of the tree.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            getTree();
+        });
+
+        function getTree() {
+
+            $.ajax({
+                url: '@Url.Action("GetAllMembers", "Home")',
+                type: "GET",
+
+                success: function (result) {
+
+                    $('#tree').treeview({
+                        data: result,
+                        levels: 2,
+
+                        onNodeSelected: function (event, node) {
+                            GetNodeById(node.id);
+                        }
+                    });
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(
+                        "Unable to load family tree:",
+                        error
+                    );
+                }
+            });
+        }
+
+
+        function GetNodeById(id) {
+
+            $.get(
+                '@Url.Action("GetMemberById", "Home")',
+                { id: id },
+
+                function (data) {
+                    $("#partialRender").html(data);
+                }
+            );
+        }
+
+    </script>
+}
+

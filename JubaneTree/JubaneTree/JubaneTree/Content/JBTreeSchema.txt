@@ -1,0 +1,18 @@
+CREATE TABLE [dbo].[Member](
+	[MemberID] [int] IDENTITY(1,1) NOT NULL,
+	[Title] [varchar](10) NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Surname] [varchar](50) NOT NULL,
+	[Telephone] [varchar](50) NULL,
+	[Mobile] [varchar](50) NULL,
+	[Email] [varchar](50) NULL,
+	[Address] [varchar](max) NULL,
+	[Job] [varchar](50) NULL,
+	[Company] [varbinary](50) NULL,
+	[Country] [nvarchar](50) NULL,
+	[Image] [varchar](max) NULL,
+	[HasChildren] [bit] NOT NULL CONSTRAINT [DF_Member_HasChildren]  DEFAULT ((0)),
+	[FamilyCodeID] [int] NULL,
+	[IsAlive] [bit] NOT NULL 
+
+[{"id":1,"text":"Root node","children":[{"id":2,"text":"Child node 1"},{"id":3,"text":"Child node Nick"}]}]

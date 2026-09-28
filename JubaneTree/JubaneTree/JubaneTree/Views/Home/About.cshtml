@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Family History";
+}
+
+<div class="container-fluid family-history">
+
+    <div class="page-header">
+        <h2>Family History</h2>
+        <p class="text-muted">
+            Our heritage and ancestral roots
+        </p>
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                <span class="glyphicon glyphicon-picture"></span>
+                Known Ancestral Hierarchy
+            </h3>
+        </div>
+
+        <div class="panel-body">
+
+            <p class="lead-text">
+                This diagram shows the currently known hierarchy
+                going backwards.
+            </p>
+
+            <div class="hierarchy-container">
+
+                <a href="@Url.Content(
+                    "~/Images/jubaneTreeElders.png")"
+                   target="_blank"
+                   title="Open full-size image">
+
+                    <img src="@Url.Content(
+                            "~/Images/jubaneTreeElders.png")"
+                         alt="Known Jubane ancestral hierarchy"
+                         class="hierarchy-image" />
+
+                </a>
+
+            </div>
+
+            <div class="alert alert-info history-note">
+
+                <span class="glyphicon glyphicon-info-sign"></span>
+
+                <strong>Note</strong>
+
+                <p>
+                    This diagram is a working representation of the
+                    known ancestral hierarchy and is still under
+                    discussion.
+                </p>
+
+                <p>
+                    Names, relationships and spellings may be updated
+                    as more information becomes available.
+                </p>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+
+    .family-history {
+        padding-top: 15px;
+        padding-bottom: 30px;
+    }
+
+        .family-history .page-header {
+            margin-top: 10px;
+        }
+
+            .family-history .page-header h2 {
+                margin-bottom: 5px;
+            }
+
+    .lead-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .hierarchy-container {
+        width: 100%;
+        padding: 25px;
+        margin-bottom: 25px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow-x: auto;
+    }
+
+    .hierarchy-image {
+        display: inline-block;
+        max-width: 100%;
+        height: auto;
+        vertical-align: middle;
+    }
+
+    .history-note {
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+
+        .history-note strong {
+            margin-left: 5px;
+            font-size: 16px;
+        }
+
+        .history-note p {
+            margin: 8px 0 0 25px;
+        }
+
+    @@media (max-width: 767px) {
+
+        .hierarchy-container {
+            padding: 10px;
+        }
+        /*
+         * Don't make the diagram unreadably tiny on phones.
+         * Allow horizontal scrolling instead.
+         */
+        .hierarchy-image {
+            max-width: none;
+            width: 850px;
+        }
+    }
+</style>

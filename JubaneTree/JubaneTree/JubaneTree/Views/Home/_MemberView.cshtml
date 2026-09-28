@@ -1,0 +1,658 @@
+﻿@model JubaneTree.Models.Member
+
+<div id="partialRender">
+
+    @using (Html.BeginForm(
+        "SaveMember",
+        "Home",
+        FormMethod.Post,
+        new { id = "memberForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(model => model.id)
+        @Html.HiddenFor(model => model.FamilyCode)
+        @Html.HiddenFor(model => model.HasChildren)
+        @Html.HiddenFor(model => model.Image)
+
+    <div class="family-card member-profile">
+
+        <!-- PROFILE HEADER -->
+        <div class="member-profile-header">
+
+            <div class="member-photo-wrapper">
+
+                @if (!string.IsNullOrWhiteSpace(Model.Image))
+                {
+                    <img src="@Url.Content(Model.Image)"
+                         class="member-photo"
+                         alt="@Model.Name @Model.Surname" />
+                }
+                else
+                {
+                    <img src="@Url.Content("~/Images/defaultImage.jpg")"
+                         class="member-photo"
+                         alt="@Model.Name @Model.Surname" />
+                }
+
+            </div>
+
+
+            <div class="member-header-details">
+
+                <div class="member-title-row">
+
+                    <div>
+
+                        <h1>
+                            @Model.Name @Model.Surname
+                        </h1>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Job))
+                        {
+                            <p class="member-occupation">
+                                @Model.Job
+
+                                @if (!string.IsNullOrWhiteSpace(Model.Company))
+                                {
+                                    <span> at @Model.Company</span>
+                                }
+                            </p>
+                        }
+
+                    </div>
+
+
+                    <div class="member-status">
+
+                        @if (Model.IsAlive != null && Model.IsAlive == true)
+                        {
+                            <span class="label label-success">
+                                Living
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="label label-default">
+                                Remembered
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="member-actions">
+
+                    <button type="button"
+                            id="AddChild"
+                            class="btn btn-family">
+
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Add Child
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM BODY -->
+        <div class="member-profile-body">
+
+            <div class="row">
+
+
+                <!-- LEFT COLUMN -->
+                <div class="col-md-6">
+
+                    <div class="profile-section">
+
+                        <h4>
+                            <span class="glyphicon glyphicon-user"></span>
+                            Personal Details
+                        </h4>
+
+
+                        <div class="row">
+
+                            <div class="col-sm-4">
+
+                                <div class="form-group">
+
+                                    @Html.LabelFor(model => model.Title)
+
+                                    @Html.DropDownListFor(
+                                        model => model.Title,
+                                        new SelectList(
+                                            new[]
+                                            {
+                                                "Mr",
+                                                "Mrs",
+                                                "Miss",
+                                                "Ms",
+                                                "Dr"
+                                            },
+                                            Model.Title
+                                        ),
+                                        "Select",
+                                        new
+                                        {
+                                            @class = "form-control"
+                                        }
+                                    )
+
+                                    @Html.ValidationMessageFor(
+                                    model => model.Title,
+                                    "",
+                                    new { @class = "text-danger" })
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-8">
+
+                                <div class="form-group">
+
+                                    @Html.LabelFor(model => model.Name)
+
+                                    @Html.TextBoxFor(
+                                        model => model.Name,
+                                        new
+                                        {
+                                            @class = "form-control"
+                                        }
+                                    )
+
+                                    @Html.ValidationMessageFor(
+                                        model => model.Name,
+                                        "",
+                                        new { @class = "text-danger" }
+                                    )
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Surname)
+
+                            @Html.TextBoxFor(
+                                model => model.Surname,
+                                new
+                                {
+                                    @class = "form-control"
+                                }
+                            )
+
+                            @Html.ValidationMessageFor(
+                                model => model.Surname,
+                                "",
+                                new { @class = "text-danger" }
+                            )
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(
+                                model => model.DateOfBirth,
+                                "Date of birth"
+                            )
+
+                            <div class="input-group">
+
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
+
+                                @Html.TextBoxFor(
+                                    model => model.DateOfBirth,
+                                    "{0:dd/MM/yyyy}",
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        id = "DateOfBirth",
+                                        autocomplete = "off"
+                                    }
+                                )
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>Status</label>
+
+                            <div class="checkbox family-checkbox">
+
+                                <label>
+
+                                    @Html.CheckBox(
+                                         "IsAlive",
+                                         Model.IsAlive ?? false,
+                                         new { @class = "form-check-input" }
+                                     )
+
+                                    This person is living
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTACT -->
+
+                    <div class="profile-section">
+
+                        <h4>
+                            <span class="glyphicon glyphicon-earphone"></span>
+                            Contact Details
+                        </h4>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Email)
+
+                            @Html.TextBoxFor(
+                                model => model.Email,
+                                new
+                                {
+                                    @class = "form-control",
+                                    type = "email",
+                                    placeholder = "Email address"
+                                }
+                            )
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+
+                                    @Html.LabelFor(model => model.Mobile)
+
+                                    @Html.TextBoxFor(
+                                        model => model.Mobile,
+                                        new
+                                        {
+                                            @class = "form-control"
+                                        }
+                                    )
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-sm-6">
+
+                                <div class="form-group">
+
+                                    @Html.LabelFor(model => model.Telephone)
+
+                                    @Html.TextBoxFor(
+                                        model => model.Telephone,
+                                        new
+                                        {
+                                            @class = "form-control"
+                                        }
+                                    )
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RIGHT COLUMN -->
+                <div class="col-md-6">
+
+                    <!-- LOCATION -->
+
+                    <div class="profile-section">
+
+                        <h4>
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                            Location
+                        </h4>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Country)
+
+                            @Html.TextBoxFor(
+                                model => model.Country,
+                                new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Country"
+                                }
+                            )
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Address)
+
+                            @Html.TextAreaFor(
+                                model => model.Address,
+                                new
+                                {
+                                    @class = "form-control",
+                                    rows = "3",
+                                    placeholder = "Address"
+                                }
+                            )
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EMPLOYMENT -->
+
+                    <div class="profile-section">
+
+                        <h4>
+                            <span class="glyphicon glyphicon-briefcase"></span>
+                            Employment
+                        </h4>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Job)
+
+                            @Html.TextBoxFor(
+                                model => model.Job,
+                                new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Occupation"
+                                }
+                            )
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            @Html.LabelFor(model => model.Company)
+
+                            @Html.TextBoxFor(
+                                model => model.Company,
+                                new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Company"
+                                }
+                            )
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FAMILY INFORMATION -->
+
+                    <div class="profile-section">
+
+                        <h4>
+                            <span class="glyphicon glyphicon-tree-deciduous"></span>
+                            Family
+                        </h4>
+
+
+                        <div class="family-info-row">
+
+                            <div>
+                                <strong>Member ID</strong>
+                                <span>#@Model.id</span>
+                            </div>
+
+
+                            <div>
+                                <strong>Children</strong>
+
+                                @if (Model.HasChildren)
+                                {
+                                    <span>Has children</span>
+                                }
+                                else
+                                {
+                                    <span>No children recorded</span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PHOTO -->
+        <div class="form-section">
+
+            <div class="form-section-title">
+                <span class="glyphicon glyphicon-camera"></span>
+                Profile photo
+            </div>
+
+            <div class="photo-upload">
+
+                <div class="photo-placeholder" id="photoPreview">
+
+                    <span class="glyphicon glyphicon-user"></span>
+
+                </div>
+
+                <div>
+
+                    <label for="Avatar"
+                           class="btn btn-default">
+
+                        <span class="glyphicon glyphicon-camera"></span>
+                        Choose photo
+
+                    </label>
+
+                    <input type="file"
+                           id="Avatar"
+                           name="upload"
+                           accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+                           style="display:none;" />
+
+                    <p id="selectedFileName"
+                       class="help-block">
+                        JPG or PNG image
+                    </p>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!-- FOOTER ACTIONS -->
+
+        <div class="member-profile-footer">
+
+            <button type="button"
+                    id="BackToTree"
+                    class="btn btn-default">
+
+                <span class="glyphicon glyphicon-arrow-left"></span>
+                Back to Tree
+
+            </button>
+
+
+            <button type="submit"
+                    class="btn btn-family">
+
+                <span class="glyphicon glyphicon-floppy-disk"></span>
+                Save Changes
+
+            </button>
+
+        </div>
+
+    </div>
+    }
+
+</div>
+
+
+<script type="text/javascript">
+
+    $("#AddChild").on("click", function () {
+
+        var id = $("#id").val();
+        var familyCodeId = $("#FamilyCode").val();
+
+        $.get(
+            '@Url.Action("AddChild", "Home")',
+            {
+                id: id,
+                code: familyCodeId
+            },
+            function (data) {
+
+                $("#partialRender").html(data);
+
+            }
+        );
+
+    });
+
+
+    $("#BackToTree").on("click", function () {
+
+        window.location.href =
+            '@Url.Action("Index", "Home")';
+
+    });
+
+    $(document).on(
+        "submit",
+        "#memberForm",
+        function (e) {
+
+            e.preventDefault();
+
+            var form = $(this);
+
+            if (!form.valid()) {
+                return;
+            }
+
+            var formData =
+                new FormData(this);
+
+            $.ajax({
+                url: form.attr("action"),
+                type: "POST",
+
+                data: formData,
+
+                // Required for file uploads
+                processData: false,
+                contentType: false,
+
+                success: function (html) {
+
+                    $("#partialRender")
+                        .html(html);
+
+                    if ($.validator &&
+                        $.validator.unobtrusive) {
+
+                        $.validator.unobtrusive.parse(
+                            "#partialRender"
+                        );
+                    }
+                },
+
+                error: function (xhr) {
+
+                    console.error(
+                        "Unable to save member:",
+                        xhr.responseText
+                    );
+                }
+            });
+        }
+    );
+
+    $(document).on(
+        "change",
+        "#Avatar",
+        function () {
+
+            var file = this.files[0];
+
+            if (!file) {
+                $("#selectedFileName")
+                    .text("JPG or PNG image");
+
+                return;
+            }
+
+            $("#selectedFileName")
+                .text(file.name);
+
+            // Optional image preview
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+
+                $("#photoPreview").html(
+                    $("<img>", {
+                        src: e.target.result,
+                        class: "img-responsive",
+                        alt: "Selected profile photo"
+                    })
+                );
+            };
+
+            reader.readAsDataURL(file);
+        }
+    );
+
+</script>

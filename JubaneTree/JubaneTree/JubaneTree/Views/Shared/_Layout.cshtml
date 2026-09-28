@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        @(string.IsNullOrWhiteSpace(ViewBag.Title)
+            ? "Jubane Family Tree"
+            : ViewBag.Title + " - Jubane Family Tree")
+    </title>
+
+    @Styles.Render("~/Content/css")
+
+    <link rel="stylesheet"
+          href="~/Scripts/JSTree/themes/default/style.css" />
+
+    <link rel="stylesheet"
+          href="~/Content/bootstrap-datetimepicker.css" />
+
+    @Scripts.Render("~/bundles/modernizr")
+
+    <!-- jQuery MUST load before page JavaScript -->
+    @Scripts.Render("~/bundles/jquery")
+
+    @RenderSection("styles", required: false)
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top family-navbar">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+
+                <button type="button"
+                        class="navbar-toggle collapsed"
+                        data-toggle="collapse"
+                        data-target="#familyNavbar">
+
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+
+                </button>
+
+                @Html.ActionLink(
+                    "Jubane Family Tree",
+                    "Index",
+                    "Home",
+                    new { area = "" },
+                    new { @class = "navbar-brand" }
+                )
+
+            </div>
+
+            <div class="collapse navbar-collapse"
+                 id="familyNavbar">
+
+                <ul class="nav navbar-nav">
+
+                    <li>
+                        @Html.ActionLink(
+                            "Family Tree",
+                            "Index",
+                            "Home"
+                        )
+                    </li>
+
+                    <li>
+                        @Html.ActionLink(
+                            "About Our Family",
+                            "About",
+                            "Home"
+                        )
+                    </li>
+
+                    <li>
+                        @Html.ActionLink(
+                            "Contact",
+                            "Contact",
+                            "Home"
+                        )
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+    </nav>
+
+
+    <!-- Main application -->
+    <main class="container-fluid family-page">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="container-fluid family-footer">
+
+        <div class="row">
+
+            <div class="col-sm-6">
+                <strong>Jubane Family Tree</strong>
+                <br />
+                Zizalwane lezihlobo zako Jubane
+            </div>
+
+            <div class="col-sm-6 text-right">
+                &copy; @DateTime.Now.Year Jubane Family
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jstree")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
